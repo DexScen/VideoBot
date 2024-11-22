@@ -3,7 +3,7 @@ filebeat.inputs:
     enabled: true
     # Я запущу filebeat в докере и проброшу логи приложения по данному пути
     paths:
-      - D:\\VideoBot\\VideoAPI\\pkg\\utils\\videoapi.log
+      - /pkg/utils/videoapi.log 
     # В fields мы можем указать дополнительные поля, а затем в logstash вытаскивать их 
     # и делать какую-нибудь дополнительную работу с логами
     fields:

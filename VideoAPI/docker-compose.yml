@@ -1,6 +1,15 @@
-version: '3.7' #Вот тут лучше без версии
-
 services:
+  beats:
+    image: elastic/filebeat:7.16.2
+    entrypoint: "filebeat -e -strict.perms=false"
+    volumes:
+      - ./configs/filebeat/config.yml:/usr/share/filebeat/filebeat.yml:ro
+      - ./pkg/utils/:/pkg/utils/:ro
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
   elasticsearch:
     image: elasticsearch:7.16.1
     volumes:
@@ -44,16 +53,6 @@ services:
       - elk
     ports:
       - "5601:5601"
-
-  beats:
-  image: elastic/filebeat:7.16.2
-  volumes:
-    - ./configs/filebeat/config.yml:/usr/share/filebeat/filebeat.yml:ro
-    - ./videoapi/:/videoapi/:ro
-  networks:
-    - elk
-  depends_on:
-    - elasticsearch
 
 networks:
   elk:

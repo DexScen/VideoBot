@@ -3,3 +3,7 @@ network.host: 0.0.0.0 # Для корректной работы внутри к
 
 xpack.security.enabled: true # Для поддержки функционала, обеспечивающего безопасность кластера
 xpack.license.self_generated.type: basic # Типа лицензии "basic" для наших нужд хватит с головой
+
+
+#http://localhost:5601/ to elastic
+#http://localhost:9200/_cat/indices to indices
