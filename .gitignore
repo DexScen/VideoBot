@@ -1,2 +1,3 @@
 /VideoAPI/docker_volumes
 *.log
+*.env
