@@ -2,18 +2,18 @@ module github.com/DexScen/VideoBot
 
 go 1.23.2
 
-require github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
+require (
+	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
+	github.com/j0n1que/sso-protos v0.0.6
+	github.com/joho/godotenv v1.5.1
+	google.golang.org/grpc v1.68.0
+	google.golang.org/protobuf v1.35.2
+)
 
 require (
-	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible // indirect
-	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0 // indirect
-	github.com/j0n1que/sso-protos v0.0.6 // indirect
-	github.com/joho/godotenv v1.5.1 // indirect
-	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
 	golang.org/x/net v0.29.0 // indirect
 	golang.org/x/sys v0.25.0 // indirect
 	golang.org/x/text v0.18.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240903143218-8af14fe29dc1 // indirect
-	google.golang.org/grpc v1.68.0 // indirect
-	google.golang.org/protobuf v1.35.2 // indirect
 )

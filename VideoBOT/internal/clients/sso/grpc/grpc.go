@@ -29,14 +29,14 @@ func New(ctx context.Context, log *slog.Logger, addr string, timeout time.Durati
 		grpcretry.WithPerRetryTimeout(timeout),
 	}
 
-	logOpts := []grpclog.Option{
+	/*logOpts := []grpclog.Option{
 		grpclog.WithLogOnEvents(grpclog.PayloadReceived, grpclog.PayloadSent),
-	}
+	}*/
 
 	cc, err := grpc.DialContext(ctx, addr,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithChainUnaryInterceptor(
-			grpclog.UnaryClientInterceptor(InterceptorLogger(log), logOpts...),
+			//grpclog.UnaryClientInterceptor(InterceptorLogger(log), logOpts...),
 			grpcretry.UnaryClientInterceptor(retryOpts...),
 		))
 

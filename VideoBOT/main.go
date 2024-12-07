@@ -13,6 +13,11 @@ import (
 	msghandlers "github.com/DexScen/VideoBot/VideoBOT/msgHandlers"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
+	"google.golang.org/grpc/metadata"
+)
+
+var (
+	telegramLogin = "telegramLogin"
 )
 
 func init() {
@@ -79,11 +84,18 @@ func main() {
 
 	//Pass ssoClient wherever you want, example of usage: 	err := ssoClient.RegisterNewUser(ctx, login, password, telegramLogin)...
 
-	ssoClient.GetAllUsers(context.Background())
+	//ssoClient.GetAllUsers(context.Background())
 
+	firstUsername := true
+	var userName string
 	for update := range updates {
 		if update.Message == nil { // ignore non-Message updates
 			continue
+		}
+
+		if firstUsername{
+			userName = update.Message.From.UserName
+			firstUsername = false
 		}
 
 		if update.Message.Text == "/start" {
@@ -95,45 +107,50 @@ func main() {
 		}
 
 		if update.Message.Text == "Get video" {
-			err := msghandlers.HandleGetVideo(update, bot)
+			err := msghandlers.HandleGetVideo(metadata.NewOutgoingContext(context.Background(), metadata.Pairs(telegramLogin, userName)), updates, bot, ssoClient)
 			if err != nil {
 				log.Println(err)
 			}
 		}
 
 		if update.Message.Text == "Register" {
-			err := msghandlers.HandleRegister(update, bot)
+			err := msghandlers.HandleRegister(metadata.NewOutgoingContext(context.Background(), metadata.Pairs(telegramLogin, userName)), updates, bot, ssoClient)
 			if err != nil {
 				log.Println(err)
 			}
 		}
 
 		if update.Message.Text == "Log in" {
-			err := msghandlers.HandleLogIn(update, bot)
+			err := msghandlers.HandleLogIn(metadata.NewOutgoingContext(context.Background(), metadata.Pairs(telegramLogin, userName)), updates, bot, ssoClient)
 			if err != nil {
 				log.Println(err)
 			}
 		}
 
 		if update.Message.Text == "Change password" {
-			err := msghandlers.HandleChangePassword(update, bot)
+			err := msghandlers.HandleChangePassword(metadata.NewOutgoingContext(context.Background(), metadata.Pairs(telegramLogin, userName)), updates, bot, ssoClient)
 			if err != nil {
 				log.Println(err)
 			}
 		}
 
 		if update.Message.Text == "Delete video" {
-			err := msghandlers.HandleDeleteVideo(update, bot)
+			err := msghandlers.HandleDeleteVideo(metadata.NewOutgoingContext(context.Background(), metadata.Pairs(telegramLogin, userName)), updates, bot, ssoClient)
 			if err != nil {
 				log.Println(err)
 			}
 		}
 
 		if update.Message.Text == "Get all users" {
-			err := msghandlers.HandleGetAllUsers(update, bot)
+			err := msghandlers.HandleGetAllUsers(metadata.NewOutgoingContext(context.Background(), metadata.Pairs(telegramLogin, userName)), updates, bot, ssoClient)
 			if err != nil {
 				log.Println(err)
 			}
 		}
 	}
 }
+
+// В контекст добавлять логин телеграма, в middleware на все ручки(один)(женя скинет пример)
+// Ручки свои дописать
+// Ручки добавить женька функции
+// Доработать фронтик
