@@ -17,4 +17,8 @@ var ButtonKeyboard = tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButton("Delete video"),
 		tgbotapi.NewKeyboardButton("Get all users"),
 	),
+	tgbotapi.NewKeyboardButtonRow(
+		tgbotapi.NewKeyboardButton("Test write"),
+		tgbotapi.NewKeyboardButton("Test read"),
+	),
 )

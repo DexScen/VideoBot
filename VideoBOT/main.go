@@ -23,7 +23,7 @@ var (
 func init() {
 	//conf.env contains TELEGRAM_APITOKEN=yourtoken and info for sso service
 
-	envFile := "videoBOT/conf.env"
+	envFile := "conf.env"
 
 	if err := godotenv.Load(envFile); err != nil {
 		log.Printf("Error loading .env file: %v", err)
@@ -93,7 +93,7 @@ func main() {
 			continue
 		}
 
-		if firstUsername{
+		if firstUsername {
 			userName = update.Message.From.UserName
 			firstUsername = false
 		}
@@ -103,6 +103,20 @@ func main() {
 			msg.ReplyMarkup = model.ButtonKeyboard
 			if _, err := bot.Send(msg); err != nil {
 				log.Panic(err)
+			}
+		}
+
+		if update.Message.Text == "Test write" {
+			err := msghandlers.HandleTestWrite(metadata.NewOutgoingContext(context.Background(), metadata.Pairs(telegramLogin, userName)), updates, bot, ssoClient)
+			if err != nil {
+				log.Println(err)
+			}
+		}
+
+		if update.Message.Text == "Test read" {
+			err := msghandlers.HandleTestRead(metadata.NewOutgoingContext(context.Background(), metadata.Pairs(telegramLogin, userName)), updates, bot, ssoClient)
+			if err != nil {
+				log.Println(err)
 			}
 		}
 

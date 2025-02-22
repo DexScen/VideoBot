@@ -2,12 +2,69 @@ package msghandlers
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"strconv"
+	"sync/atomic"
+	"time"
 
 	ssogrpc "github.com/DexScen/VideoBot/VideoBOT/internal/clients/sso/grpc"
 	"github.com/DexScen/VideoBot/VideoBOT/model"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
+
+func HandleTestWrite(ctx context.Context, updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI, c *ssogrpc.Client) error {
+
+	t := time.Now()
+	login := int64(0)
+	// for range 1000{
+	// 	go func() {
+	// 		atomic.AddInt64(&login, 1)
+	// 		err := c.RegisterNewUser(ctx, strconv.Itoa(int(atomic.LoadInt64(&login))), strconv.Itoa(int(atomic.LoadInt64(&login))), strconv.Itoa(int(atomic.LoadInt64(&login))))
+	// 		if err != nil {
+	// 			log.Panic(err)
+	// 		}
+	// 	}()
+	// }
+	for {
+		if time.Since(t) > time.Second {
+			break
+		}
+		go func() {
+			err := c.RegisterNewUser(ctx, strconv.Itoa(int(atomic.LoadInt64(&login))), strconv.Itoa(int(atomic.LoadInt64(&login))), strconv.Itoa(int(atomic.LoadInt64(&login))))
+			if err != nil {
+				fmt.Println("Amount of requests processed in Testing write:", login)
+				log.Panic(err)
+				return
+			}
+			atomic.AddInt64(&login, 1)
+		}()
+	}
+
+	return nil
+}
+
+func HandleTestRead(ctx context.Context, updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI, c *ssogrpc.Client) error {
+
+	t := time.Now()
+	login := int64(0)
+	for {
+		if time.Since(t) > time.Second {
+			break
+		}
+		go func() {
+			atomic.AddInt64(&login, 1)
+			_, err := c.GetAllUsers(ctx)
+			if err != nil {
+				log.Panic(err)
+			}
+		}()
+	}
+
+	fmt.Println("Amount of requests processed in Testing read:", login)
+
+	return nil
+}
 
 func HandleGetVideo(ctx context.Context, updates tgbotapi.UpdatesChannel, bot *tgbotapi.BotAPI, c *ssogrpc.Client) error {
 
